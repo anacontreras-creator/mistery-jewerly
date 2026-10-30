@@ -64,3 +64,5 @@ class Productos extends BaseController
         return redirect()->to('/productos');
     }
 }
+
+//hola
