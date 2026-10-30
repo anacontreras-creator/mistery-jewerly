@@ -27,8 +27,8 @@
                     </label>
                     <input
                         type="text"
-                        name="nombre"
-                        id="nombre"
+                        name="name"
+                        id="name"
                         class="form-control"
                         required
                     >
@@ -55,8 +55,8 @@
                     </label>
                     <input
                         type="password"
-                        name="contrasena"
-                        id="contrasena"
+                        name="password"
+                        id="password"
                         class="form-control"
                         required
                         minlength="8"

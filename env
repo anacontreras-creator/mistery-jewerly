@@ -30,12 +30,13 @@ app.forceGlobalSecureRequests = false
 # DATABASE
 #--------------------------------------------------------------------
 
+CI_ENVIRONMENT = development
+
 database.default.hostname = localhost
-database.default.database = tienda_db
+database.default.database = misteryjewelry
 database.default.username = root
-database.default.password = 
+database.default.password =
 database.default.DBDriver = MySQLi
-database.default.DBPrefix =
 database.default.port = 3306
 
 #--------------------------------------------------------------------

@@ -38,8 +38,8 @@
                     <label for="contrasena" class="form-label">Contraseña</label>
                     <input
                         type="password"
-                        name="contrasena"
-                        id="contrasena"
+                        name="password"
+                        id="password"
                         class="form-control"
                         required
                     >
