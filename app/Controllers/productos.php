@@ -57,12 +57,36 @@ class Productos extends BaseController
         }
 
         $carrito = session()->get('carrito') ?? [];
+
         $carrito[$id] = ($carrito[$id] ?? 0) + 1;
 
         session()->set('carrito', $carrito);
 
+        session()->setFlashdata('mensaje', '¡Producto agregado al carrito!');
+
         return redirect()->to('/productos');
     }
-}
 
-//hola
+    public function verCarrito()
+    {
+        if (!session()->get('isLoggedIn')) {
+            return redirect()->to('/login');
+        }
+
+        $productoModel = new ProductoModel();
+        $carrito = session()->get('carrito') ?? [];
+
+        $datos['productos'] = [];
+
+        foreach ($carrito as $id => $cantidad) {
+            $producto = $productoModel->find($id);
+
+            if ($producto) {
+                $producto['cantidad'] = $cantidad;
+                $datos['productos'][] = $producto;
+            }
+        }
+
+        return view('carrito/index', $datos);
+    }
+}
