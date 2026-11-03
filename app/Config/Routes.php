@@ -36,3 +36,6 @@ $routes->post(
     'Productos::agregarAlCarrito/$1'
 );
 $routes->get('carrito', 'Productos::verCarrito');
+$routes->post('carrito/aumentar/(:num)', 'Productos::aumentarCantidad/$1');
+
+$routes->post('carrito/disminuir/(:num)', 'Productos::disminuirCantidad/$1');

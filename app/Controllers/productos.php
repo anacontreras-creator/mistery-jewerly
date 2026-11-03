@@ -68,25 +68,64 @@ class Productos extends BaseController
     }
 
     public function verCarrito()
-    {
-        if (!session()->get('isLoggedIn')) {
-            return redirect()->to('/login');
-        }
-
-        $productoModel = new ProductoModel();
-        $carrito = session()->get('carrito') ?? [];
-
-        $datos['productos'] = [];
-
-        foreach ($carrito as $id => $cantidad) {
-            $producto = $productoModel->find($id);
-
-            if ($producto) {
-                $producto['cantidad'] = $cantidad;
-                $datos['productos'][] = $producto;
-            }
-        }
-
-        return view('carrito/index', $datos);
+{
+    if (!session()->get('isLoggedIn')) {
+        return redirect()->to('/login');
     }
+
+    $productoModel = new ProductoModel();
+    $carrito = session()->get('carrito') ?? [];
+
+    $datos['productos'] = [];
+
+    foreach ($carrito as $id => $cantidad) {
+        $producto = $productoModel->find($id);
+
+        if ($producto) {
+            $producto['id_productos'] = $producto['id_productos'];
+            $producto['cantidad'] = (int) $cantidad;
+
+            $datos['productos'][] = $producto;
+        }
+    }
+
+    return view('carrito/index', $datos);
+}
+public function aumentarCantidad($id)
+{
+    if (!session()->get('isLoggedIn')) {
+        return redirect()->to('/login');
+    }
+
+    $carrito = session()->get('carrito') ?? [];
+
+    if (isset($carrito[$id])) {
+        $carrito[$id]++;
+    }
+
+    session()->set('carrito', $carrito);
+
+    return redirect()->to('/carrito');
+}
+
+public function disminuirCantidad($id)
+{
+    if (!session()->get('isLoggedIn')) {
+        return redirect()->to('/login');
+    }
+
+    $carrito = session()->get('carrito') ?? [];
+
+    if (isset($carrito[$id])) {
+        $carrito[$id]--;
+
+        if ($carrito[$id] <= 0) {
+            unset($carrito[$id]);
+        }
+    }
+
+    session()->set('carrito', $carrito);
+
+    return redirect()->to('/carrito');
+}
 }
