@@ -19,7 +19,7 @@ class Auth extends BaseController
             return redirect()->to('/'); // 1.2 Si el usuario está logueado, redirigílo a la página principal
         }
 
-        return view('auth/register'); // 1.3 Mostrá la vista de registro
+        return view('Auth/home', ['mostrarFormulario' => 'register']);// 1.3 Mostrá la vista de registro
     }
 
 
@@ -70,7 +70,7 @@ class Auth extends BaseController
             return redirect()->to('/'); // 3.2 Si el usuario está logueado, redirigílo a la página principal
         }
 
-        return view('auth/login'); // 3.3 Mostrá la vista de login
+        return view('Auth/home', ['mostrarFormulario' => 'login']);
     }
 
 
@@ -103,11 +103,10 @@ class Auth extends BaseController
             return redirect()->to('/'); // 4.9 Redirigí al usuario a la página principal
         }
 
-        return redirect()->back()
-            ->withInput()
-            ->with('error', 'Correo o contraseña incorrectos.');
+       return redirect()->to('/login')
+    ->withInput()
+    ->with('error', 'Correo o contraseña incorrectos.');
     }
-
 
     // 5. CIERRE DE SESIÓN
     public function logout()

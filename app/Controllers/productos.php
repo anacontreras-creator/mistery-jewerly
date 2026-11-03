@@ -6,6 +6,7 @@ use App\Models\ProductoModel;
 
 class Productos extends BaseController
 {
+    // VER PRODUCTOS: acceso libre
     public function index()
     {
         $productoModel = new ProductoModel();
@@ -14,19 +15,23 @@ class Productos extends BaseController
         return view('productos/index', $datos);
     }
 
+    // CREAR PRODUCTOS: requiere iniciar sesión
     public function crear()
     {
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to('/login');
+            return redirect()->to('/login')
+                ->with('error', 'Iniciá sesión para continuar.');
         }
 
         return view('productos/crear');
     }
 
+    // GUARDAR PRODUCTOS: requiere iniciar sesión
     public function guardar()
     {
         if (!session()->get('isLoggedIn')) {
-            return redirect()->to('/login');
+            return redirect()->to('/login')
+                ->with('error', 'Iniciá sesión para continuar.');
         }
 
         $productoModel = new ProductoModel();
@@ -43,98 +48,102 @@ class Productos extends BaseController
         return redirect()->to('/productos');
     }
 
-   
-public function agregarAlCarrito($id)
-{
-    if (!session()->get('isLoggedIn')) {
-        return redirect()->to('/login');
-    }
+    // AGREGAR AL CARRITO: requiere iniciar sesión
+    public function agregarAlCarrito($id)
+    {
+        if (!session()->get('isLoggedIn')) {
+            return redirect()->to('/login')
+                ->with('error', 'Iniciá sesión para agregar productos al carrito.');
+        }
 
-    $productoModel = new ProductoModel();
-    $producto = $productoModel->find($id);
+        $productoModel = new ProductoModel();
+        $producto = $productoModel->find($id);
 
-    if (!$producto) {
+        if (!$producto) {
+            return redirect()->to('/productos');
+        }
+
+        $carrito = session()->get('carrito') ?? [];
+
+        $carrito[$id] = ($carrito[$id] ?? 0) + 1;
+
+        session()->set('carrito', $carrito);
+
+        session()->setFlashdata('notificacionCarrito', [
+            'nombre'   => $producto['nombre'],
+            'imagen'   => $producto['imagen'] ?? '',
+            'cantidad' => $carrito[$id]
+        ]);
+
         return redirect()->to('/productos');
     }
 
-    $carrito = session()->get('carrito') ?? [];
+    // VER CARRITO: requiere iniciar sesión
+    public function verCarrito()
+    {
+        if (!session()->get('isLoggedIn')) {
+            return redirect()->to('/login')
+                ->with('error', 'Iniciá sesión para ver tu carrito.');
+        }
 
-    $carrito[$id] = ($carrito[$id] ?? 0) + 1;
+        $productoModel = new ProductoModel();
 
-    session()->set('carrito', $carrito);
+        $carrito = session()->get('carrito') ?? [];
 
-    // Datos para mostrar la notificación
-    session()->setFlashdata('notificacionCarrito', [
-        'nombre' => $producto['nombre'],
-        'imagen' => $producto['imagen'] ?? '',
-        'cantidad' => $carrito[$id]
-    ]);
+        $datos['productos'] = [];
 
-    return redirect()->to('/productos');
-}
+        if (!empty($carrito)) {
+            foreach ($carrito as $id => $cantidad) {
 
-   public function verCarrito()
-{
-    $productoModel = new ProductoModel();
+                $producto = $productoModel->find($id);
 
-    // Obtener el carrito de la sesión
-    $carrito = session()->get('carrito') ?? [];
-
-    // Preparar la lista de productos
-    $datos['productos'] = [];
-
-    // Si el carrito tiene productos
-    if (!empty($carrito)) {
-
-        foreach ($carrito as $id => $cantidad) {
-
-            $producto = $productoModel->find($id);
-
-            if ($producto) {
-                $producto['cantidad'] = (int) $cantidad;
-                $datos['productos'][] = $producto;
+                if ($producto) {
+                    $producto['cantidad'] = (int) $cantidad;
+                    $datos['productos'][] = $producto;
+                }
             }
         }
+
+        return view('carrito/index', $datos);
     }
 
-    // Abrir siempre la vista del carrito
-    return view('carrito/index', $datos);
-}
-public function aumentarCantidad($id)
-{
-    if (!session()->get('isLoggedIn')) {
-        return redirect()->to('/login');
-    }
-
-    $carrito = session()->get('carrito') ?? [];
-
-    if (isset($carrito[$id])) {
-        $carrito[$id]++;
-    }
-
-    session()->set('carrito', $carrito);
-
-    return redirect()->to('/carrito');
-}
-
-public function disminuirCantidad($id)
-{
-    if (!session()->get('isLoggedIn')) {
-        return redirect()->to('/login');
-    }
-
-    $carrito = session()->get('carrito') ?? [];
-
-    if (isset($carrito[$id])) {
-        $carrito[$id]--;
-
-        if ($carrito[$id] <= 0) {
-            unset($carrito[$id]);
+    // AUMENTAR CANTIDAD: requiere iniciar sesión
+    public function aumentarCantidad($id)
+    {
+        if (!session()->get('isLoggedIn')) {
+            return redirect()->to('/login');
         }
+
+        $carrito = session()->get('carrito') ?? [];
+
+        if (isset($carrito[$id])) {
+            $carrito[$id]++;
+        }
+
+        session()->set('carrito', $carrito);
+
+        return redirect()->to('/carrito');
     }
 
-    session()->set('carrito', $carrito);
+    // DISMINUIR CANTIDAD: requiere iniciar sesión
+    public function disminuirCantidad($id)
+    {
+        if (!session()->get('isLoggedIn')) {
+            return redirect()->to('/login');
+        }
 
-    return redirect()->to('/carrito');
-}
+        $carrito = session()->get('carrito') ?? [];
+
+        if (isset($carrito[$id])) {
+            $carrito[$id]--;
+
+            if ($carrito[$id] <= 0) {
+                unset($carrito[$id]);
+            }
+        }
+
+        session()->set('carrito', $carrito);
+
+        return redirect()->to('/carrito');
+    }
 }

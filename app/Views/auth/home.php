@@ -399,6 +399,147 @@
                 letter-spacing: 1px;
             }
         }
+        
+/* VENTANA TRANSLÚCIDA LOGIN Y REGISTRO */
+
+.auth-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(25, 25, 25, 0.15);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 40px;
+
+    /* Transparencia y efecto vidrio */
+   background: rgba(248, 247, 244, 0.15);
+backdrop-filter: blur(5px);
+-webkit-backdrop-filter: blur(5px);
+
+    /* Bordes redondeados */
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 22px;
+
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
+}
+
+.auth-card h3 {
+    font-family: 'Playfair Display', serif;
+    text-align: center;
+    font-size: 27px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+}
+
+.auth-card .form-control {
+    border-radius: 12px;
+    border: 1px solid rgba(120, 120, 120, 0.3);
+    background: rgba(255, 255, 255, 0.35);
+    padding: 12px;
+}
+
+.auth-card .form-control:focus {
+    box-shadow: none;
+    border-color: #777;
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 12px;
+    background: rgba(25, 25, 25, 0.9);
+    color: white;
+    border: 1px solid #191919;
+    border-radius: 12px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: .3s;
+}
+
+.auth-btn:hover {
+    background: transparent;
+    color: #191919;
+}
+
+@media(max-width: 575px) {
+    .auth-card {
+        padding: 30px 24px;
+    }
+}
+.auth-card h3 {
+    font-family: 'Playfair Display', serif;
+    text-align: center;
+    font-size: 27px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+}
+
+.auth-card label {
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #555;
+}
+
+.auth-card .form-control {
+    border-radius: 0;
+    border: 1px solid rgba(120, 120, 120, 0.4);
+    background: rgba(255, 255, 255, 0.55);
+    padding: 12px;
+}
+
+.auth-card .form-control:focus {
+    box-shadow: none;
+    border-color: #555;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 12px;
+    background: #191919;
+    color: white;
+    border: 1px solid #191919;
+    border-radius: 0;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: .3s;
+}
+
+.auth-btn:hover {
+    background: transparent;
+    color: #191919;
+}
+
+.auth-link {
+    margin-top: 23px;
+    text-align: center;
+    font-size: 12px;
+    color: #555;
+}
+
+.auth-link a {
+    color: #191919;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+@media (max-width: 575px) {
+    .auth-card {
+        padding: 30px 24px;
+    }
+}
+
     </style>
 </head>
 
@@ -623,6 +764,111 @@
 
     <span class="linea-pie"></span>
 </footer>
+
+<?php if (!empty($mostrarFormulario)): ?>
+
+<div class="auth-overlay">
+
+    <div class="auth-card">
+
+        <?php if ($mostrarFormulario === 'login'): ?>
+
+            <h3>Iniciar sesión</h3>
+
+            <?php if (session()->getFlashdata('error')): ?>
+                <div class="alert alert-danger">
+                    <?= esc(session()->getFlashdata('error')) ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (session()->getFlashdata('exito')): ?>
+                <div class="alert alert-success">
+                    <?= esc(session()->getFlashdata('exito')) ?>
+                </div>
+            <?php endif; ?>
+
+            <form action="<?= site_url('login') ?>" method="post">
+                <?= csrf_field() ?>
+
+                <div class="mb-3">
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" name="email"
+                           id="email" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="password">Contraseña</label>
+                    <input type="password" name="password"
+                           id="password" class="form-control" required>
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    Iniciar sesión
+                </button>
+            </form>
+
+            <div class="auth-link">
+                ¿No tenés cuenta?
+                <a href="<?= site_url('register') ?>">
+                    Registrate aquí
+                </a>
+            </div>
+
+        <?php else: ?>
+
+            <h3>Crear cuenta</h3>
+
+            <?php if (session()->getFlashdata('errores')): ?>
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        <?php foreach (session()->getFlashdata('errores') as $error): ?>
+                            <li><?= esc($error) ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+
+            <form action="<?= site_url('register') ?>" method="post">
+                <?= csrf_field() ?>
+
+                <div class="mb-3">
+                    <label for="name">Nombre completo</label>
+                    <input type="text" name="name"
+                           id="name" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="register-email">Correo electrónico</label>
+                    <input type="email" name="email"
+                           id="register-email" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="register-password">Contraseña</label>
+                    <input type="password" name="password"
+                           id="register-password" class="form-control"
+                           minlength="8" required>
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    Registrarse
+                </button>
+            </form>
+
+            <div class="auth-link">
+                ¿Ya tenés cuenta?
+                <a href="<?= site_url('login') ?>">
+                    Iniciá sesión aquí
+                </a>
+            </div>
+
+        <?php endif; ?>
+
+    </div>
+
+</div>
+
+<?php endif; ?>
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
