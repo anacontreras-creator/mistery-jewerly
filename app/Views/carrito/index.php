@@ -318,6 +318,7 @@
 </nav>
 
 <!-- CONTENIDO DEL CARRITO -->
+<!-- CONTENIDO DEL CARRITO -->
 <div class="carrito-contenedor">
 
     <a href="<?= site_url('productos') ?>" class="volver">
@@ -332,113 +333,99 @@
 
         <div class="carrito-layout">
 
+            <!-- SECCIÓN IZQUIERDA: LISTA DE PRODUCTOS -->
             <section>
-
                 <?php foreach ($productos as $producto): ?>
-
                     <?php
                         $id = $producto['id_productos'];
-                        $precio = (float) $producto['precio'];
+                        // Forzamos el precio a flotante o entero por seguridad
+                        $precio = (float) $producto['precio']; 
                         $cantidad = (int) $producto['cantidad'];
-                        $subtotal = $precio * $cantidad;
-                        $total += $subtotal;
+                        $subtotalProducto = $precio * $cantidad;
+                        $total += $subtotalProducto;
                     ?>
 
-                    <article class="producto-carrito">
-
-                        <img
-                            src="<?= base_url('img/productos/' . $producto['imagen']) ?>"
-                            alt="<?= esc($producto['nombre']) ?>"
-                        >
-
+                    <div class="producto-carrito">
+                        <!-- Imagen del producto desde tu BD -->
+                        <img src="<?= base_url('uploads/' . $producto['imagen']) ?>" alt="<?= esc($producto['nombre']) ?>">
+                        
                         <div class="producto-info">
-
-                          <div class="controles-cantidad">
-
-    <form action="<?= site_url('carrito/disminuir/' . $id) ?>" method="post">
-        <?= csrf_field() ?>
-        <button type="submit" class="boton-cantidad">−</button>
+                            <h3><?= esc($producto['nombre']) ?></h3>
+                            <p class="text-muted">Código: #<?= $id ?></p>
+                            
+                            <!-- Controles de Cantidad conectados al Backend -->
+                            <!-- Controles de Cantidad conectados a tus rutas reales -->
+<div class="controles-cantidad">
+    
+    <!-- Botón Disminuir (-) -->
+    <form action="<?= site_url('carrito/disminuir/' . $id) ?>" method="POST">
+        <button type="submit" class="boton-cantidad">-</button>
     </form>
 
-    <span class="numero-cantidad"><?= $cantidad ?></span>
+    <span><?= $cantidad ?></span>
 
-    <form action="<?= site_url('carrito/aumentar/' . $id) ?>" method="post">
-        <?= csrf_field() ?>
+    <!-- Botón Aumentar (+) -->
+    <form action="<?= site_url('carrito/aumentar/' . $id) ?>" method="POST">
         <button type="submit" class="boton-cantidad">+</button>
     </form>
-
+    
 </div>
 
-                            <p>
-                                <?= esc($producto['descripcion'] ?? '') ?>
-                            </p>
 
-                           
-
+                        <!-- Precio Total por esa Fila de Producto -->
+                        <div class="producto-precio fw-medium">
+                            $ <?= number_format($subtotalProducto, 0, ',', '.') ?>
                         </div>
-
-                        <div class="producto-precio">
-                            $<?= number_format($subtotal, 0, ',', '.') ?>
-                        </div>
-
-                    </article>
-
+                    </div>
                 <?php endforeach; ?>
-
             </section>
 
-            <aside>
-
-                <div class="resumen">
-
-                    <h3>Resumen de compra</h3>
-
-                    <div class="resumen-linea">
-                        <span>Subtotal</span>
-                        <span>$<?= number_format($total, 0, ',', '.') ?></span>
-                    </div>
-
-                    <div class="resumen-linea">
-                        <span>Envío</span>
-                        <span>A calcular</span>
-                    </div>
-
-                    <div class="resumen-linea resumen-total">
-                        <span>Total</span>
-                        <span>$<?= number_format($total, 0, ',', '.') ?></span>
-                    </div>
-
-                    <a href="#" class="boton-compra">
-                        FINALIZAR COMPRA
-                    </a>
-
+            <!-- SECCIÓN DERECHA: RESUMEN DE COMPRA -->
+            <aside class="resumen">
+                <h3>Resumen del pedido</h3>
+                
+                <div class="resumen-linea">
+                    <span>Subtotal</span>
+                    <span>$ <?= number_format($total, 0, ',', '.') ?></span>
                 </div>
+                
+                <div class="resumen-linea">
+                    <span>Envío</span>
+                    <span class="text-success">Gratis</span>
+                </div>
+
+                <div class="resumen-linea resumen-total">
+                    <span>Total</span>
+                    <span>$ <?= number_format($total, 0, ',', '.') ?></span>
+                </div>
+
+                <a href="<?= site_url('checkout') ?>" class="boton-compra text-uppercase fw-semibold">
+                    Iniciar Compra
+                </a>
 
                 <div class="ayuda">
-                    <strong>¿Necesitás ayuda?</strong>
-                    <p>Consultanos por nuestros productos y envíos.</p>
+                    <span class="fw-semibold">¿Necesitás ayuda?</span>
+                    <p>Escribinos por WhatsApp ante cualquier duda con tu pago o pedido.</p>
                 </div>
-
             </aside>
 
         </div>
 
     <?php else: ?>
-
-        <div class="carrito-vacio">
-            <h3>Tu carrito está vacío</h3>
-            <p>Descubrí nuestros accesorios y encontrá tus favoritos.</p>
-
-            <a href="<?= site_url('productos') ?>" class="seguir">
-                Ver productos →
+        <!-- ESTADO CUANDO EL CARRITO ESTÁ VACÍO -->
+        <div class="carrito-vacio text-center my-5">
+            <i class="bi bi-bag-x text-muted" style="font-size: 3rem;"></i>
+            <p class="mt-3 text-muted">Tu carrito está vacío en este momento.</p>
+            <a href="<?= site_url('productos') ?>" class="btn btn-dark rounded-0 px-4 mt-2 text-uppercase" style="font-size: 0.85rem; letter-spacing: 1px;">
+                Ver Productos
             </a>
         </div>
-
     <?php endif; ?>
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Scripts de Bootstrap (Necesarios para que funcione el Navbar responsive en tu diseño) -->
+<script src="https://jsdelivr.net"></script>
 
 </body>
 </html>
