@@ -43,52 +43,61 @@ class Productos extends BaseController
         return redirect()->to('/productos');
     }
 
-    public function agregarAlCarrito($id)
-    {
-        if (!session()->get('isLoggedIn')) {
-            return redirect()->to('/login');
-        }
-
-        $productoModel = new ProductoModel();
-        $producto = $productoModel->find($id);
-
-        if (!$producto) {
-            return redirect()->to('/productos');
-        }
-
-        $carrito = session()->get('carrito') ?? [];
-
-        $carrito[$id] = ($carrito[$id] ?? 0) + 1;
-
-        session()->set('carrito', $carrito);
-
-        session()->setFlashdata('mensaje', '¡Producto agregado al carrito!');
-
-        return redirect()->to('/productos');
-    }
-
-    public function verCarrito()
+   
+public function agregarAlCarrito($id)
 {
     if (!session()->get('isLoggedIn')) {
         return redirect()->to('/login');
     }
 
     $productoModel = new ProductoModel();
+    $producto = $productoModel->find($id);
+
+    if (!$producto) {
+        return redirect()->to('/productos');
+    }
+
     $carrito = session()->get('carrito') ?? [];
 
+    $carrito[$id] = ($carrito[$id] ?? 0) + 1;
+
+    session()->set('carrito', $carrito);
+
+    // Datos para mostrar la notificación
+    session()->setFlashdata('notificacionCarrito', [
+        'nombre' => $producto['nombre'],
+        'imagen' => $producto['imagen'] ?? '',
+        'cantidad' => $carrito[$id]
+    ]);
+
+    return redirect()->to('/productos');
+}
+
+   public function verCarrito()
+{
+    $productoModel = new ProductoModel();
+
+    // Obtener el carrito de la sesión
+    $carrito = session()->get('carrito') ?? [];
+
+    // Preparar la lista de productos
     $datos['productos'] = [];
 
-    foreach ($carrito as $id => $cantidad) {
-        $producto = $productoModel->find($id);
+    // Si el carrito tiene productos
+    if (!empty($carrito)) {
 
-        if ($producto) {
-            $producto['id_productos'] = $producto['id_productos'];
-            $producto['cantidad'] = (int) $cantidad;
+        foreach ($carrito as $id => $cantidad) {
 
-            $datos['productos'][] = $producto;
+            $producto = $productoModel->find($id);
+
+            if ($producto) {
+                $producto['cantidad'] = (int) $cantidad;
+                $datos['productos'][] = $producto;
+            }
         }
     }
 
+    // Abrir siempre la vista del carrito
     return view('carrito/index', $datos);
 }
 public function aumentarCantidad($id)

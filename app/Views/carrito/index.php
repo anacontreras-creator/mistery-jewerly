@@ -133,32 +133,30 @@
     display: inline-flex;
     align-items: center;
     justify-content: space-between;
-    gap: 22px;
-    margin-top: 15px;
-    padding: 7px 10px;
+    gap: 14px;
+    margin-top: 10px;
+    padding: 4px 6px;
     border: 1px solid #c9beb2;
     border-radius: 50px;
     background: #f8f7f4;
-    min-width: 180px;
+    min-width: 135px;
 }
 
 .controles-cantidad form {
     margin: 0;
 }
 
-       .boton-cantidad {
+.boton-cantidad {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
+    width: 30px;
+    height: 30px;
     border: none;
     border-radius: 50%;
     background: #eee8e1;
     color: #292724;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 23px;
-    font-weight: 300;
+    font-size: 17px;
     cursor: pointer;
     transition: background 0.2s ease;
 }
@@ -167,13 +165,6 @@
     background: #ded5ca;
 }
 
-.numero-cantidad {
-    font-family: 'Playfair Display', serif;
-    font-size: 25px;
-    color: #292724;
-    min-width: 18px;
-    text-align: center;
-}
 
         /* RESUMEN */
         .resumen {
@@ -382,21 +373,7 @@
                                 <?= esc($producto['descripcion'] ?? '') ?>
                             </p>
 
-                            <div class="controles-cantidad">
-
-                                <form action="<?= site_url('carrito/disminuir/' . $id) ?>" method="post">
-                                    <?= csrf_field() ?>
-                                    <button type="submit" class="boton-cantidad">−</button>
-                                </form>
-
-                                <span><?= $cantidad ?></span>
-
-                                <form action="<?= site_url('carrito/aumentar/' . $id) ?>" method="post">
-                                    <?= csrf_field() ?>
-                                    <button type="submit" class="boton-cantidad">+</button>
-                                </form>
-
-                            </div>
+                           
 
                         </div>
 

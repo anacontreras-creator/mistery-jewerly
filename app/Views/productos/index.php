@@ -59,21 +59,18 @@ $productos = $productos ?? [];
         }
 
         /* BANNER */
-       
-/* BANNER */
-.banner {
-    min-height: 280px;
-    padding: 38px 6%;
-    display: flex;
-    align-items: center;
-    background-image:
-        linear-gradient(90deg, rgba(248,247,244,0.85), rgba(248,247,244,0.15)),
-        url("<?= base_url('img/banner-productos.png') ?>");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
+        .banner {
+            min-height: 280px;
+            padding: 38px 6%;
+            display: flex;
+            align-items: center;
+            background-image:
+                linear-gradient(90deg, rgba(248,247,244,0.85), rgba(248,247,244,0.15)),
+                url("<?= base_url('img/banner-productos.png') ?>");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
 
         .banner h1 {
             font-family: 'Playfair Display', serif;
@@ -229,6 +226,94 @@ $productos = $productos ?? [];
             margin: 0 10px;
         }
 
+        /* NOTIFICACIÓN VERTICAL DEL CARRITO */
+        .notificacion-carrito {
+            position: fixed;
+            top: 85px;
+            right: 25px;
+            z-index: 9999;
+            width: 230px;
+            background: #f5f4f2;
+            border: 1px solid #d2cfcb;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            animation: aparecerNotificacion .35s ease;
+        }
+
+        .notificacion-carrito img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 7px;
+            margin-bottom: 15px;
+        }
+
+        .notificacion-info {
+            width: 100%;
+        }
+
+        .notificacion-info h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 17px;
+            color: #292724;
+            margin: 0 0 10px;
+        }
+
+        .notificacion-info p {
+            font-size: 13px;
+            color: #666;
+            margin: 0 0 15px;
+        }
+
+        .notificacion-info a {
+            color: #fff;
+            background: #333;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-decoration: none;
+            padding: 12px;
+            display: block;
+        }
+
+        .notificacion-info a:hover {
+            background: #666;
+        }
+
+        .cerrar-notificacion {
+            position: absolute;
+            top: 7px;
+            right: 10px;
+            border: none;
+            background: transparent;
+            color: #555;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        @keyframes aparecerNotificacion {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 450px) {
+            .notificacion-carrito {
+                width: 210px;
+                right: 15px;
+                top: 80px;
+            }
+        }
+
         @media (max-width: 800px) {
             .productos-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .barra-filtros { align-items: flex-start; flex-direction: column; }
@@ -248,13 +333,14 @@ $productos = $productos ?? [];
             .precio { font-size: 15px; }
             .boton-carrito { font-size: 8px; letter-spacing: 0; padding: 10px 3px; }
         }
+
         .banner {
-    background-image: url("<?= base_url('img/banner-productos.png') ?>");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    min-height: 280px;
-}
+            background-image: url("<?= base_url('img/banner-productos.png') ?>");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 280px;
+        }
     </style>
 </head>
 
@@ -294,9 +380,9 @@ $productos = $productos ?? [];
                 <a href="<?= site_url('login') ?>" aria-label="Mi cuenta">
                     <i class="bi bi-person"></i>
                 </a>
-               <a href="<?= site_url('carrito') ?>" aria-label="Carrito">
-    <i class="bi bi-bag"></i>
-</a>
+                <a href="<?= site_url('carrito') ?>" aria-label="Carrito">
+                    <i class="bi bi-bag"></i>
+                </a>
             </div>
         </div>
     </div>
@@ -352,13 +438,13 @@ $productos = $productos ?? [];
                     } elseif (strpos($texto, 'pulsera') !== false) {
                         $categoria = 'pulseras';
                     } elseif (
-    strpos($texto, 'aro') !== false ||
-    strpos($texto, 'arete') !== false ||
-    strpos($texto, 'argolla') !== false ||
-    strpos($texto, 'trepador') !== false
-) {
-    $categoria = 'aros';
-}
+                        strpos($texto, 'aro') !== false ||
+                        strpos($texto, 'arete') !== false ||
+                        strpos($texto, 'argolla') !== false ||
+                        strpos($texto, 'trepador') !== false
+                    ) {
+                        $categoria = 'aros';
+                    }
 
                     $idProducto = (int) ($producto['id_productos'] ?? 0);
                     $urlImagen = $imagen !== ''
@@ -422,7 +508,6 @@ $productos = $productos ?? [];
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-  
 const tarjetas = Array.from(document.querySelectorAll('.producto'));
 const botones = document.querySelectorAll('.filtros button[data-categoria]');
 const grid = document.getElementById('productosGrid');
@@ -472,8 +557,51 @@ document.getElementById('ordenar').addEventListener('change', function () {
 
     ordenadas.forEach(tarjeta => grid.appendChild(tarjeta));
 });
-
 </script>
+
+<?php if ($notificacion = session()->getFlashdata('notificacionCarrito')): ?>
+
+<div class="notificacion-carrito" id="notificacionCarrito">
+
+    <button class="cerrar-notificacion"
+            onclick="cerrarNotificacion()">
+        &times;
+    </button>
+
+    <?php if (!empty($notificacion['imagen'])): ?>
+        <img
+            src="<?= base_url('img/productos/' . esc($notificacion['imagen'])) ?>"
+            alt="<?= esc($notificacion['nombre']) ?>"
+        >
+    <?php endif; ?>
+
+    <div class="notificacion-info">
+
+        <h4><?= esc($notificacion['nombre']) ?></h4>
+
+        <p>Cantidad: <?= (int) $notificacion['cantidad'] ?></p>
+
+        <a href="<?= site_url('carrito') ?>">
+            VER CARRITO →
+        </a>
+
+    </div>
+
+</div>
+
+<script>
+    function cerrarNotificacion() {
+        const notificacion = document.getElementById('notificacionCarrito');
+
+        if (notificacion) {
+            notificacion.remove();
+        }
+    }
+
+    setTimeout(cerrarNotificacion, 5000);
+</script>
+
+<?php endif; ?>
 
 </body>
 </html>
