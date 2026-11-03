@@ -540,6 +540,143 @@ backdrop-filter: blur(5px);
     }
 }
 
+/* BARRA DE BÚSQUEDA */
+
+.search-toggle {
+    background: none;
+    border: none;
+    color: var(--negro);
+    cursor: pointer;
+    padding: 0;
+}
+
+.search-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(248, 247, 244, 0.97);
+    padding: 0 20px;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition: max-height .35s ease, opacity .3s ease,
+                padding .35s ease, visibility .35s;
+}
+
+.search-container.active {
+    max-height: 100px;
+    opacity: 1;
+    visibility: visible;
+    padding: 18px 20px;
+}
+
+.search-form {
+    max-width: 650px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #aaa;
+}
+
+.search-form input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 12px 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--negro);
+}
+
+.search-form input::placeholder {
+    color: #999;
+    letter-spacing: 1px;
+}
+
+.search-form button {
+    border: none;
+    background: transparent;
+    color: var(--negro);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 8px;
+}
+
+/* BUSCADOR DEL HEADER */
+
+.navbar-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.search-box {
+    display: flex;
+    align-items: center;
+}
+
+.search-box form {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: width .4s ease, opacity .3s ease;
+}
+
+.search-box.active form {
+    width: 350px;
+    opacity: 1;
+}
+
+.search-box input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #aaa;
+    outline: none;
+    background: transparent;
+    padding: 7px 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: .5px;
+}
+
+.search-box input::placeholder {
+    color: #999;
+    font-weight: 300;
+    letter-spacing: .7px;
+}
+
+.search-box .search-toggle {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+.navbar-icons > .icono-nav {
+    margin-left: 0;
+    flex-shrink: 0;
+}
+
+@media (max-width: 991px) {
+    .search-box.active form {
+        width: 120px;
+    }
+}
+/* PERSONALIZAR LA CRUZ DEL BUSCADOR */
+.search-box input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: searchfield-cancel-button;
+    appearance: auto;
+    cursor: pointer;
+    opacity: .55;
+    transform: scale(.8);
+    margin-right: 18px;
+    filter: grayscale(1);
+}
     </style>
 </head>
 
@@ -588,27 +725,62 @@ backdrop-filter: blur(5px);
                 </li>
             </ul>
 
-            <div class="d-flex align-items-center">
-                <a href="<?= base_url('productos') ?>"
-                   class="icono-nav" aria-label="Buscar productos">
-                    <i class="bi bi-search"></i>
-                </a>
+           <div class="d-flex align-items-center navbar-icons">
 
-                <a href="<?= base_url('login') ?>"
-                   class="icono-nav" aria-label="Iniciar sesión">
-                    <i class="bi bi-person"></i>
-                </a>
+    <!-- Buscador -->
+    <div class="search-box" id="searchBox">
+        <form action="<?= base_url('productos') ?>" method="get">
+            <input
+                type="search"
+                name="buscar"
+                id="searchInput"
+                placeholder= "Busca tu joya ideal"
+                autocomplete="off"
+            >
+        </form>
 
-                <a href="<?= base_url('register') ?>"
-                   class="icono-nav" aria-label="Registrarse">
-                    <i class="bi bi-bag"></i>
-                </a>
-            </div>
+        <button type="button"
+                class="icono-nav search-toggle"
+                id="searchToggle"
+                aria-label="Abrir búsqueda">
+            <i class="bi bi-search"></i>
+        </button>
+    </div>
 
+    <!-- Usuario -->
+    <a href="<?= base_url('login') ?>" class="icono-nav">
+        <i class="bi bi-person"></i>
+    </a>
+
+    <!-- Bolsa -->
+    <a href="<?= base_url('register') ?>" class="icono-nav">
+        <i class="bi bi-bag"></i>
+    </a>
+
+</div>
         </div>
     </div>
 </nav>
 
+<!-- BARRA DE BÚSQUEDA -->
+
+<div class="search-container" id="searchContainer">
+    <form class="search-form"
+          action="<?= base_url('productos') ?>"
+          method="get">
+
+        <input type="search"
+               name="buscar"
+               id="searchInput"
+               placeholder="¿Qué estás buscando?"
+               autocomplete="off">
+
+        <button type="submit" aria-label="Buscar">
+            <i class="bi bi-arrow-right"></i>
+        </button>
+
+    </form>
+</div>
 
 <!-- PORTADA -->
 
@@ -873,5 +1045,27 @@ backdrop-filter: blur(5px);
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const searchToggle = document.getElementById('searchToggle');
+    const searchBox = document.getElementById('searchBox');
+    const searchInput = document.getElementById('searchInput');
+
+    searchToggle.addEventListener('click', function () {
+
+        searchBox.classList.toggle('active');
+
+        if (searchBox.classList.contains('active')) {
+            searchInput.focus();
+        } else {
+            searchInput.value = '';
+        }
+
+    });
+</script>
+
+</body>
+</html>
 </body>
 </html>
