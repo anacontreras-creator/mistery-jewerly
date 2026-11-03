@@ -299,14 +299,6 @@
                 </li>
             </ul>
 
-            <div class="iconos d-flex align-items-center">
-                <a href="<?= site_url('productos') ?>" aria-label="Buscar">
-                    <i class="bi bi-search"></i>
-                </a>
-
-                <a href="<?= site_url('login') ?>" aria-label="Mi cuenta">
-                    <i class="bi bi-person"></i>
-                </a>
 
                 <a href="<?= site_url('carrito') ?>" aria-label="Carrito">
                     <i class="bi bi-bag"></i>

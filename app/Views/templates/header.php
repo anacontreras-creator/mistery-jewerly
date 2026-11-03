@@ -1,31 +1,70 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= esc($titulo ?? 'Inicio') ?></title>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<?= base_url('assets/css/custom.css') ?>">
-</head>
-<body class="bg-light d-flex flex-column min-vh-100">
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid px-lg-5 px-3">
 
-<nav class="navbar navbar-dark bg-dark mb-4">
-    <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
-        <a class="navbar-brand mb-0 h1" href="<?= site_url('/') ?>">Mi tienda</a>
-        
-        <div class="d-flex align-items-center text-white">
-            <?php if (session()->get('isLoggedIn')): ?>
-                <nav>
-                   <a href="<?= site_url('productos') ?>" class="btn btn-outline-danger btn-sm">PRODUCTOS</a>
-            </nav>
-                <a href="<?= site_url('logout') ?>" class="btn btn-outline-danger btn-sm">CERRAR SESION</a>
-            <?php else: ?>
-                <a href="<?= site_url('login') ?>" class="btn btn-outline-light btn-sm me-2">Ingresar</a>
-                <a href="<?= site_url('register') ?>" class="btn btn-primary btn-sm">Registrarse</a>
-            <?php endif; ?>
+        <a class="navbar-brand d-flex align-items-center"
+           href="<?= base_url('/') ?>">
+            <span class="estrella-logo">✦</span>
+            <span class="marca">MYSTERY JEWELRY</span>
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#menuPrincipal"
+                aria-controls="menuPrincipal"
+                aria-expanded="false"
+                aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+
+            <ul class="navbar-nav mx-auto align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url('/') ?>">
+                        INICIO
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url('productos') ?>">
+                        PRODUCTOS
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= base_url('/') ?>#contacto">
+                        CONTACTO
+                    </a>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center navbar-icons">
+
+                <div class="search-box" id="searchBox">
+                    <form action="<?= base_url('productos') ?>" method="get">
+                        <input
+                            type="search"
+                            name="buscar"
+                            id="searchInput"
+                            placeholder="Busca tu joya ideal"
+                            autocomplete="off"
+                        >
+                    </form>
+
+                    <button type="button"
+                            class="icono-nav search-toggle"
+                            id="searchToggle"
+                            aria-label="Abrir búsqueda">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+
+                <a href="<?= base_url('carrito') ?>" class="icono-nav">
+                    <i class="bi bi-bag"></i>
+                </a>
+
+            </div>
         </div>
     </div>
 </nav>
 
-<div class="container flex-grow-1">

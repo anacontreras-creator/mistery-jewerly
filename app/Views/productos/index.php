@@ -24,40 +24,79 @@ $productos = $productos ?? [];
         }
 
         /* ENCABEZADO */
-        .navbar {
-            background: #f8f7f4;
-            border-bottom: 1px solid #e5e2de;
-            padding: 15px 4%;
-        }
+       /* ENCABEZADO - MISMO ESTILO QUE INICIO */
+.navbar {
+    min-height: 60px;
+    background: #f8f7f4;
+    border-bottom: 1px solid #e5e2de;
+    padding: 8px 0;
+}
 
-        .marca {
-            color: #222;
-            text-decoration: none;
-            font-size: 15px;
-            letter-spacing: 4px;
-            white-space: nowrap;
-        }
+.marca {
+    color: #191919;
+    font-size: 16px;
+    letter-spacing: 5px;
+    font-weight: 400;
+    white-space: nowrap;
+}
 
-        .estrella {
-            font-size: 24px;
-            margin-right: 9px;
-        }
+.estrella-logo {
+    font-size: 25px;
+    margin-right: 10px;
+}
 
-        .navbar .nav-link {
-            color: #222;
-            font-size: 10px;
-            letter-spacing: 1.5px;
-            padding: 10px 14px;
-        }
+.navbar .nav-link {
+    color: #191919;
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 10px 13px !important;
+}
 
-        .navbar .nav-link:hover { color: #888; }
+.navbar .nav-link:hover {
+    color: #777570;
+}
 
-        .iconos a {
-            color: #222;
-            font-size: 18px;
-            margin-left: 18px;
-        }
+.icono-nav {
+    color: #191919;
+    font-size: 18px;
+    margin-left: 15px;
+    text-decoration: none;
+}
 
+.navbar-icons {
+    gap: 15px;
+}
+
+@media (max-width: 991px) {
+    .marca {
+        font-size: 14px;
+        letter-spacing: 3px;
+    }
+
+    .navbar .nav-link {
+        padding: 9px 0 !important;
+    }
+
+    .icono-nav {
+        margin: 10px 12px 10px 0;
+    }
+}
+
+@media (max-width: 575px) {
+    .navbar {
+        padding: 8px 0;
+    }
+
+    .marca {
+        font-size: 12px;
+        letter-spacing: 2px;
+    }
+
+    .estrella-logo {
+        font-size: 21px;
+        margin-right: 6px;
+    }
+}
         /* BANNER */
         .banner {
             min-height: 280px;
@@ -341,52 +380,105 @@ $productos = $productos ?? [];
             background-repeat: no-repeat;
             min-height: 280px;
         }
+        
+/* BUSCADOR DEL HEADER */
+
+.navbar-icons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+}
+
+.search-box form {
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: width .4s ease, opacity .3s ease;
+}
+
+.search-box.active form {
+    width: 350px;
+    opacity: 1;
+}
+
+.search-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-box input {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #aaa;
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+    padding: 7px 30px 7px 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: .5px;
+}
+
+.search-box input::placeholder {
+    color: #999;
+    font-weight: 300;
+    letter-spacing: .7px;
+}
+
+.search-box .search-toggle {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+.search-input-container input:focus {
+    box-shadow: none;
+}
+
+#clearSearch {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #999;
+    font-size: 17px;
+    font-weight: 300;
+    cursor: pointer;
+    display: none;
+    padding: 0;
+}
+
+#clearSearch:hover {
+    color: #333;
+}
+
+.search-input-container input:not(:placeholder-shown) + #clearSearch {
+    display: block;
+}
+
+@media (max-width: 991px) {
+    .search-box.active form {
+        width: 120px;
+    }
+}
+
     </style>
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-lg">
-    <div class="container-fluid p-0">
 
-        <a class="navbar-brand marca d-flex align-items-center" href="<?= site_url('/') ?>">
-            <span class="estrella">✦</span>
-            MYSTERY JEWELRY
-        </a>
-
-        <button class="navbar-toggler" type="button"
-                data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
-                aria-label="Abrir menú">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="menuPrincipal">
-            <ul class="navbar-nav mx-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= site_url('/') ?>">INICIO</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= site_url('productos') ?>">PRODUCTOS</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= site_url('/') ?>#contacto">CONTACTO</a>
-                </li>
-            </ul>
-
-            <div class="iconos d-flex align-items-center">
-                <a href="<?= site_url('productos') ?>" aria-label="Buscar">
-                    <i class="bi bi-search"></i>
-                </a>
-                <a href="<?= site_url('login') ?>" aria-label="Mi cuenta">
-                    <i class="bi bi-person"></i>
-                </a>
-                <a href="<?= site_url('carrito') ?>" aria-label="Carrito">
-                    <i class="bi bi-bag"></i>
-                </a>
-            </div>
-        </div>
-    </div>
-</nav>
+<?= view('templates/header') ?>
 
 <header class="banner">
     <div>
@@ -602,6 +694,28 @@ document.getElementById('ordenar').addEventListener('change', function () {
 </script>
 
 <?php endif; ?>
+
+<script>
+    const searchToggle = document.getElementById('searchToggle');
+    const searchBox = document.getElementById('searchBox');
+    const searchInput = document.getElementById('searchInput');
+    const clearSearch = document.getElementById('clearSearch');
+
+    searchToggle.addEventListener('click', function () {
+        searchBox.classList.toggle('active');
+
+        if (searchBox.classList.contains('active')) {
+            searchInput.focus();
+        } else {
+            searchInput.value = '';
+        }
+    });
+
+    clearSearch.addEventListener('click', function () {
+        searchInput.value = '';
+        searchInput.focus();
+    });
+</script>
 
 </body>
 </html>
