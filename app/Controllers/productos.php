@@ -7,13 +7,24 @@ use App\Models\ProductoModel;
 class Productos extends BaseController
 {
     // VER PRODUCTOS: acceso libre
-    public function index()
-    {
-        $productoModel = new ProductoModel();
-        $datos['productos'] = $productoModel->findAll();
+   public function index()
+{
+    $productoModel = new ProductoModel();
 
-        return view('productos/index', $datos);
+    $buscar = $this->request->getGet('buscar');
+
+    if (!empty($buscar)) {
+        $productoModel->groupStart()
+            ->like('nombre', $buscar)
+            ->orLike('descripcion', $buscar)
+            ->groupEnd();
     }
+
+    $datos['productos'] = $productoModel->findAll();
+    $datos['buscar'] = $buscar;
+
+    return view('productos/index', $datos);
+}
 
     // CREAR PRODUCTOS: requiere iniciar sesión
     public function crear()
